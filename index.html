@@ -1,189 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hussain Songadhwala - .NET Web Developer</title>
-    <style>
-        /* Reset and Base Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-            background-color: #f4f4f4;
-            color: #333;
-        }
-
-        .container {
-            width: 90%;
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        /* Header Styles */
-        .header {
-            background-color: #ffffff;
-            text-align: center;
-            padding: 40px 0;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .header h1 {
-            font-size: 2.5rem;
-            color: #2c3e50;
-            margin-bottom: 10px;
-        }
-
-        .header p {
-            font-size: 1.2rem;
-            color: #7f8c8d;
-        }
-
-        .contact-info {
-            margin-top: 20px;
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .contact-info a {
-            color: #3498db;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .contact-info a:hover {
-            color: #2980b9;
-        }
-
-        /* Section Styles */
-        .section {
-            background-color: #ffffff;
-            margin-bottom: 20px;
-            padding: 30px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .section-title {
-            font-size: 1.8rem;
-            color: #2c3e50;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-        }
-
-        /* Skills Styles */
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-        }
-
-        .skill-category {
-            background-color: #f9f9f9;
-            padding: 15px;
-            border-radius: 5px;
-        }
-
-        .skill-category h3 {
-            color: #2c3e50;
-            margin-bottom: 10px;
-            font-size: 1.2rem;
-        }
-
-        .skill-tag {
-            display: inline-block;
-            background-color: #3498db;
-            color: white;
-            padding: 5px 10px;
-            margin: 5px;
-            border-radius: 3px;
-            font-size: 0.9rem;
-        }
-
-        /* Work Experience Styles */
-        .job {
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #ecf0f1;
-        }
-
-        .job:last-child {
-            border-bottom: none;
-        }
-
-        .job-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .job-title {
-            font-size: 1.3rem;
-            color: #2c3e50;
-        }
-
-        .job-period {
-            color: #7f8c8d;
-        }
-
-        .project {
-            margin-top: 15px;
-        }
-
-        .project-name {
-            font-weight: bold;
-            color: #2c3e50;
-        }
-
-        .project-technologies {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .tech-tag {
-            background-color: #ecf0f1;
-            padding: 3px 8px;
-            border-radius: 3px;
-            font-size: 0.8rem;
-            color: #2c3e50;
-        }
-
-        /* Responsive Adjustments */
-        @media (max-width: 768px) {
-            .contact-info {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .skills-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="./style.css" rel="stylesheet">
 </head>
 <body>
     <div class="container">
         <header class="header">
-            <h1>Hussain Songadhwala</h1>
-            <p>Experienced .NET Web Developer</p>
-            
-            <div class="contact-info">
-                <a href="mailto:husain.songadh.hs@gmail.com">✉ husain.songadh.hs@gmail.com</a>
-                <a href="tel:+917984633320">📞 +91 7984633320</a>
-                <a href="https://linkedin.com/in/husainsongadh" target="_blank">LinkedIn</a>
-                <a href="https://github.com/husainsongadh" target="_blank">GitHub</a>
+            <div class="header-content">
+                <h1>Hussain Songadhwala</h1>
+                <p>Experienced .NET Web Developer</p>
+                
+                <div class="contact-info">
+                    <a href="mailto:husain.songadhwala.hs@gmail.com">✉ Email: husain.songadhwala.hs@gmail.com</a>
+                    <a href="tel:+917984633320">📞 Phone: +91 798 463 3320</a>
+                    <a href="https://linkedin.com/in/husainsongadh" target="_blank">LinkedIn</a>
+                    <a href="https://github.com/husainsongadh" target="_blank">GitHub</a>
+                </div>
             </div>
         </header>
 
@@ -230,7 +66,7 @@
                 </div>
             </div>
         </section>
-
+            
         <section class="section">
             <h2 class="section-title">Work Experience</h2>
             
