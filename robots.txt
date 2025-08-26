@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /style.css
+Sitemap: https://husainsongadh.github.io/sitemap.xml
+
+# Allow social media crawlers
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
