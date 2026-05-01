@@ -164,8 +164,7 @@
 	}
 
 	/* Contact form — FormSubmit AJAX (delivers to inbox; no mail client) */
-	var formEndpoint =
-		"https://formsubmit.co/ajax/" + encodeURIComponent("husain.songadhwala.hs@gmail.com");
+	var formEndpoint = "https://formsubmit.co/ajax/0dc92c3cfc859401f5a58152ae86aec7";
 
 	if (contactForm && formHint) {
 		contactForm.addEventListener("submit", function (e) {
