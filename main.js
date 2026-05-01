@@ -11,6 +11,22 @@
 	var contactForm = doc.getElementById("contact-form");
 	var formHint = doc.getElementById("form-hint");
 
+	/* reCAPTCHA v3 site key from loader script (?render=...) */
+	var recaptchaSiteKey = "";
+	(function () {
+		var s = doc.querySelector('script[src*="google.com/recaptcha/api.js"]');
+		if (s && s.src) {
+			var m = s.src.match(/[?&]render=([^&]+)/);
+			if (m) {
+				try {
+					recaptchaSiteKey = decodeURIComponent(m[1]);
+				} catch (e) {
+					recaptchaSiteKey = m[1];
+				}
+			}
+		}
+	})();
+
 	/* Loading screen */
 	function hideLoader() {
 		if (!loader) return;
@@ -187,90 +203,95 @@
 				return;
 			}
 
-			if (typeof grecaptcha === "undefined") {
-				formHint.textContent = "Verification is still loading. Please wait a moment and try again.";
+			if (!recaptchaSiteKey) {
+				formHint.textContent = "Security check is not configured.";
 				formHint.setAttribute("data-state", "error");
 				return;
 			}
 
-			var captchaToken = grecaptcha.getResponse();
-			if (!captchaToken) {
-				formHint.textContent = "Please complete the verification below before sending.";
-				formHint.setAttribute("data-state", "error");
-				return;
-			}
+			function sendRequest(captchaToken) {
+				var originalLabel = submitBtn ? submitBtn.textContent : "";
+				if (submitBtn) {
+					submitBtn.disabled = true;
+					submitBtn.classList.add("is-busy");
+					submitBtn.textContent = "Sending…";
+				}
+				formHint.textContent = "";
+				formHint.removeAttribute("data-state");
 
-			var originalLabel = submitBtn ? submitBtn.textContent : "";
-			if (submitBtn) {
-				submitBtn.disabled = true;
-				submitBtn.classList.add("is-busy");
-				submitBtn.textContent = "Sending…";
-			}
-			formHint.textContent = "";
-			formHint.removeAttribute("data-state");
+				var payload = {
+					name: name.value.trim(),
+					email: email.value.trim(),
+					message: message.value.trim(),
+					_subject: "Portfolio contact from " + name.value.trim(),
+					_replyto: email.value.trim(),
+					_url: window.location.href,
+					"g-recaptcha-response": captchaToken
+				};
 
-			var payload = {
-				name: name.value.trim(),
-				email: email.value.trim(),
-				message: message.value.trim(),
-				_subject: "Portfolio contact from " + name.value.trim(),
-				_replyto: email.value.trim(),
-				_url: window.location.href,
-				"g-recaptcha-response": captchaToken
-			};
-
-			fetch(formEndpoint, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					Accept: "application/json"
-				},
-				body: JSON.stringify(payload)
-			})
-				.then(function (res) {
-					return res.json().then(function (data) {
-						return { ok: res.ok, data: data };
-					});
+				fetch(formEndpoint, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						Accept: "application/json"
+					},
+					body: JSON.stringify(payload)
 				})
-				.then(function (result) {
-					var data = result.data;
-					var ok =
-						result.ok &&
-						data &&
-						(data.success === true || data.success === "true");
-					if (ok) {
-						formHint.textContent = "Thanks — your message was sent. I’ll get back to you soon.";
-						formHint.setAttribute("data-state", "success");
-						contactForm.reset();
-						if (typeof grecaptcha !== "undefined") {
-							grecaptcha.reset();
+					.then(function (res) {
+						return res.json().then(function (data) {
+							return { ok: res.ok, data: data };
+						});
+					})
+					.then(function (result) {
+						var data = result.data;
+						var ok =
+							result.ok &&
+							data &&
+							(data.success === true || data.success === "true");
+						if (ok) {
+							formHint.textContent = "Thanks — your message was sent. I’ll get back to you soon.";
+							formHint.setAttribute("data-state", "success");
+							contactForm.reset();
+						} else {
+							var msg =
+								(data && (data.message || data.error)) ||
+								"Could not send. Email me at husain.songadhwala.hs@gmail.com.";
+							formHint.textContent = msg;
+							formHint.setAttribute("data-state", "error");
 						}
-					} else {
-						var msg =
-							(data && (data.message || data.error)) ||
-							"Could not send. Email me at husain.songadhwala.hs@gmail.com.";
-						formHint.textContent = msg;
+					})
+					.catch(function () {
+						formHint.textContent =
+							"Network error. Please try again or email husain.songadhwala.hs@gmail.com.";
 						formHint.setAttribute("data-state", "error");
-						if (typeof grecaptcha !== "undefined") {
-							grecaptcha.reset();
+					})
+					.finally(function () {
+						if (submitBtn) {
+							submitBtn.disabled = false;
+							submitBtn.classList.remove("is-busy");
+							submitBtn.textContent = originalLabel || "Send message";
 						}
-					}
-				})
-				.catch(function () {
-					formHint.textContent =
-						"Network error. Please try again or email husain.songadhwala.hs@gmail.com.";
-					formHint.setAttribute("data-state", "error");
-					if (typeof grecaptcha !== "undefined") {
-						grecaptcha.reset();
-					}
-				})
-				.finally(function () {
-					if (submitBtn) {
-						submitBtn.disabled = false;
-						submitBtn.classList.remove("is-busy");
-						submitBtn.textContent = originalLabel || "Send message";
-					}
-				});
+					});
+			}
+
+			if (typeof grecaptcha === "undefined") {
+				formHint.textContent = "Security check is still loading. Please wait a moment and try again.";
+				formHint.setAttribute("data-state", "error");
+				return;
+			}
+
+			grecaptcha.ready(function () {
+				grecaptcha
+					.execute(recaptchaSiteKey, { action: "contact" })
+					.then(function (token) {
+						sendRequest(token);
+					})
+					.catch(function () {
+						formHint.textContent =
+							"Verification failed. Please refresh the page and try again.";
+						formHint.setAttribute("data-state", "error");
+					});
+			});
 		});
 	}
 })();
