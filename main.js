@@ -187,6 +187,19 @@
 				return;
 			}
 
+			if (typeof grecaptcha === "undefined") {
+				formHint.textContent = "Verification is still loading. Please wait a moment and try again.";
+				formHint.setAttribute("data-state", "error");
+				return;
+			}
+
+			var captchaToken = grecaptcha.getResponse();
+			if (!captchaToken) {
+				formHint.textContent = "Please complete the verification below before sending.";
+				formHint.setAttribute("data-state", "error");
+				return;
+			}
+
 			var originalLabel = submitBtn ? submitBtn.textContent : "";
 			if (submitBtn) {
 				submitBtn.disabled = true;
@@ -202,7 +215,8 @@
 				message: message.value.trim(),
 				_subject: "Portfolio contact from " + name.value.trim(),
 				_replyto: email.value.trim(),
-				_url: window.location.href
+				_url: window.location.href,
+				"g-recaptcha-response": captchaToken
 			};
 
 			fetch(formEndpoint, {
@@ -228,18 +242,27 @@
 						formHint.textContent = "Thanks — your message was sent. I’ll get back to you soon.";
 						formHint.setAttribute("data-state", "success");
 						contactForm.reset();
+						if (typeof grecaptcha !== "undefined") {
+							grecaptcha.reset();
+						}
 					} else {
 						var msg =
 							(data && (data.message || data.error)) ||
 							"Could not send. Email me at husain.songadhwala.hs@gmail.com.";
 						formHint.textContent = msg;
 						formHint.setAttribute("data-state", "error");
+						if (typeof grecaptcha !== "undefined") {
+							grecaptcha.reset();
+						}
 					}
 				})
 				.catch(function () {
 					formHint.textContent =
 						"Network error. Please try again or email husain.songadhwala.hs@gmail.com.";
 					formHint.setAttribute("data-state", "error");
+					if (typeof grecaptcha !== "undefined") {
+						grecaptcha.reset();
+					}
 				})
 				.finally(function () {
 					if (submitBtn) {
