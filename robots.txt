@@ -1,9 +1,8 @@
 User-agent: *
 Allow: /
-Disallow: /style.css
+
 sitemap: https://husainsongadh.github.io/sitemap.xml
 
-# Allow social media crawlers
 User-agent: facebookexternalhit
 Allow: /
 
